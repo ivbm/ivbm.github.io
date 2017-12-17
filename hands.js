@@ -10,12 +10,6 @@ function init() {
     // The index of the pca-coordinates.
     var pca_index = 13;
 
-    function zip(arrays) {
-        return arrays[0].map(function(_,i){
-            return arrays.map(function(array){return array[i]})
-        });
-    }
-
 
     d3.text("hands.csv", function(text) {
         var data = d3.csvParseRows(text, function(d) {
@@ -26,7 +20,7 @@ function init() {
         this_hand = data[pca_index];
         x_array = this_hand.slice(0, this_hand.length/2);
         y_array = this_hand.slice(this_hand.length/2, this_hand.length);
-        zipped_xy = zip([x_array, y_array]);
+        zipped_xy = d3.zip(x_array, y_array);
 
 
         /*console.log("see here mate:");
