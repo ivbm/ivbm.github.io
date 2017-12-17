@@ -2,8 +2,13 @@ d3.select(window).on('load', init);
 
 function init() {
     var vis1 = d3.select('#hand');
-    var width = parseFloat(vis1.node().style.width);
-    var height = parseFloat(vis1.node().style.height);
+    var width_vis1 = parseFloat(vis1.node().style.width);
+    var height_vis1 = parseFloat(vis1.node().style.height);
+
+    var vis2 = d3.select('#pca');
+    var width_vis2 = parseFloat(vis2.node().style.width);
+    var height_vis2 = parseFloat(vis2.node().style.height);
+
     var padding = 15;
 
 
@@ -40,7 +45,7 @@ function init() {
                         function (d) {
                             return (d)[0];
                         })])
-                .range([padding, width - padding]);
+                .range([padding, width_vis1 - padding]);
 
             var yScale = d3.scaleLinear()
                 .domain([d3.min(zipped_xy,
@@ -51,11 +56,11 @@ function init() {
                         function (d) {
                             return d[1];
                         })])
-                .range([height - padding, padding]);
+                .range([height_vis1 - padding, padding]);
 
             var circles = d3.select('#hand')
                 .selectAll('circle')
-                .data(zipped_xy)
+                .data(zipped_xy);
 
             circles.enter()
                 .append('circle')
@@ -97,22 +102,90 @@ function init() {
     // Generates the first hand:
     updateHand(pca_index);
 
-    d3.select("body")
-        .select("#p10")
-        .on("click", function() {
 
-            //d3.select("body").select("#p10").text("hej");
-            console.log("pressed!");
-            updateHand(10);
-        });
-    d3.select("body")
-        .select("#p20")
-        .on("click", function() {
+    // Plot the pca:
 
-            //d3.select("body").select("#p10").text("hej");
-            console.log("pressed!");
-            updateHand(20);
+    d3.text("hands_pca.csv", function(text) {
+        var pca_data = d3.csvParseRows(text, function(d) {
+            return d.map(Number);
         });
+
+        console.log("Pca er lige her maaaaaaaaaaaaaaaaaaaaaaaaaaayn:");
+        console.log(pca_data);
+
+        // Which Principal Components to take? We start with PC 0 and PC 1:
+        index_x = 0;
+        index_y = 1;
+        // in each row, takes these two indeces.
+
+
+
+
+
+        var pca_xScale = d3.scaleLinear()
+            .domain([0,
+                d3.max(pca_data,
+                    function (d) {
+                        return d[index_x];
+                    })])
+            .range([padding, width_vis2 - padding]);
+
+        var pca_yScale = d3.scaleLinear()
+            .domain([d3.min(pca_data,
+                function (d) {
+                    return d[index_y];
+                }),
+                d3.max(pca_data,
+                    function (d) {
+                        return d[index_y];
+                    })])
+            .range([height_vis2 - padding, padding]);
+
+
+
+        var pca_circles = d3.select('#pca')
+            .selectAll('circle')
+            .data(pca_data);
+
+        pca_circles.enter()
+            .append('circle')
+            .attr('r', '4px')
+            .merge(pca_circles)
+            .attr('cx', function (d) {
+
+                return '' + pca_xScale(d[index_x]) + 'px';
+
+            })
+            .attr('cy', function (d) {
+                return '' + pca_yScale(d[index_y]) + 'px';
+            })
+            .on("click", function(d, i) {
+
+                updateHand(i);
+                d3.select("body")
+                    .select("#handInfo")
+                    .text("" + i);
+
+
+
+
+            });
+
+
+        /*d3.select('#pca')
+            .append('g')
+            .call(d3.axisBottom(pca_xScale));
+        d3.select('#pca')
+            .append('g')
+            .call(d3.axisRight(pca_yScale));*/
+
+
+
+
+
+
+    });
+
 
 
 
