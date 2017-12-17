@@ -13,7 +13,7 @@ function init() {
 
 
     // The index of the pca-coordinates.
-    var pca_index = 13;
+    var pca_index = 0;
 
     function updateHand(pca_index) {
 
@@ -73,7 +73,38 @@ function init() {
                 })
                 .attr('cy', function (d) {
                     return '' + yScale(d[1]) + 'px';
-                })
+                });
+
+
+            // Make lines between dots, when hovered over.
+            vis1.on("mouseover", function() {
+
+                var line = d3.line()
+                    .x(function x (d) {
+                        return xScale(d[0]);
+                    })
+                    .y(function y (d) {
+                        return yScale(d[1]);
+                    })
+                    .defined(function defined (d, i) {
+                        return true;
+                    });
+
+
+                var long_line = vis1.append("path")
+                    .attr("class", "line")
+                    .attr("fill", "none")
+                    .style("stroke", "#000")
+                    .attr("d", line(zipped_xy));
+
+
+
+            });
+            vis1.on("mouseout", function() {
+
+                d3.selectAll("path.line").remove();
+
+            });
 
 
 
@@ -101,6 +132,8 @@ function init() {
 
     // Generates the first hand:
     updateHand(pca_index);
+
+
 
 
     // Plot the pca:
