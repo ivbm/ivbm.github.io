@@ -1,8 +1,6 @@
 d3.select(window).on('load', init);
 
 function init() {
-    //var hand_data =
-
     var vis1 = d3.select('#hand');
     var width = parseFloat(vis1.node().style.width);
     var height = parseFloat(vis1.node().style.height);
@@ -11,33 +9,45 @@ function init() {
         //function (error, hand_data) {
             //if (error) throw error;   Do we need error check? where?
 
-    //Starting with plotting a single hand (row) from hands.csv . As there is no header is has to be read with csvParse
-    d3.text('hands.csv', function(text) {
-        var hand_data = d3.csvParse(text, function(d) {
+    //Starting with plotting a single hand (row) from hands.csv . As there is no header is has to be read with tsvParseRows
+    d3.text('hands_xy_flipped.txt', function(text) {
+        var hand_data = d3.tsvParseRows(text, function(d) {
             return d[0];
         });
 
-        /* hand_data is now an array of 112 items, the 56 first ones are x-coordinates and the following are y-coordinates
-        I've been trying to slice it into 2 new arrays below, but they don't contain items and I dunno why
+        /* hand_data is now an array of 56 "x,y" hand coordinate pairs.
+        It is the first COLUMN of hands_xy_flipped.txt, I was thinking it would be nice to plot 1 hand
+        The combined coordinates of each COLUMN in the file show a hand.
+        The coordinates are seperated by a comma and can be split with the following:
          */
+        var coords = d3.csvParseRows(hand_data.join());
+        //BUT we need to select each PAIR before we split them like this, I think
+
+        //Just to view data in console
         console.log(hand_data);
-        var xs = hand_data.slice(0,56);
-        var ys = hand_data.slice(57);
-
-
-        console.log(xs);
-
-        /*Need adjusting for xs and ys
+        console.log(coords);
+        //var xs = hand_data.slice(0,56);  old shit, ignore these 2 lines
+        //var ys = hand_data.slice(57);
 
             var xScale = d3.scaleLinear()
                 .domain([0,
-                    d3.max(hand_data,
+                    d3.max(hand_data,  //may need to check another max, not sure, but it depends on input below
                         function (d) {
-                            return d[0];
+                        console.log(d[0])
+                            return (d)[0];
                         })])
                 .range([padding, width - padding]);
+/*
+        var xScale = d3.scaleLinear()          backup copy paste cause I forget
+            .domain([0,
+                d3.max(hand_data,
+                    function (d) {
+                        return d[0];
+                    })])
+            .range([padding, width - padding]);
+*/
 
-            var yScale = d3.scaleLinear()
+        var yScale = d3.scaleLinear()
                 .domain([d3.min(hand_data,
                     function (d) {
                         return d[1];
@@ -54,6 +64,9 @@ function init() {
                 .enter()
                 .append('circle')
                 .attr('r', '3px')
+                //.join()
+                //.d3.csvParseRows() We need to do some sort of selection here that splits the pair before
+                //                   we can pass it off to the functions below
                 .attr('cx', function (d) {
                     return '' + xScale(d[0]) + 'px';
                 })
@@ -61,16 +74,16 @@ function init() {
                     return '' + yScale(d[1]) + 'px';
                 })
 
-                */
 
-           /*
-             We probably don't need axis
+
+
+             //We probably don't need axis, but just to see if it changes anything
 
             d3.select('#hand')
                 .append('g')
                 .call(d3.axisBottom(xScale));
             d3.select('#hand')
                 .append('g')
-                .call(d3.axisRight(yScale));*/
+                .call(d3.axisRight(yScale));
         });
 }
