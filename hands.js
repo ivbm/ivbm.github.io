@@ -6,14 +6,9 @@ function init() {
     var height = parseFloat(vis1.node().style.height);
     var padding = 15;
 
-    var pca_index = 13;
 
-    function transpose(a) {
-        // http://www.codesuck.com/2012/02/transpose-javascript-array-in-one-line.html
-        return Object.keys(a[0]).map(function(c) {
-            return a.map(function(r) { return r[c]; });
-        });
-    }
+    // The index of the pca-coordinates.
+    var pca_index = 13;
 
     function zip(arrays) {
         return arrays[0].map(function(_,i){
