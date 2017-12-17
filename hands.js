@@ -66,6 +66,7 @@ function init() {
                 .append('circle')
                 .attr('r', '3px')
                 .merge(circles)
+                .transition()
                 .attr('cx', function (d) {
 
                     return '' + xScale(d[0]) + 'px';
@@ -143,7 +144,7 @@ function init() {
             return d.map(Number);
         });
 
-        console.log("Pca er lige her maaaaaaaaaaaaaaaaaaaaaaaaaaayn:");
+        console.log("Pca is right here maaaaaaaaaaaaaaaaaaaaaaaaaaayn:");
         console.log(pca_data);
 
         // Which Principal Components to take? We start with PC 0 and PC 1:
