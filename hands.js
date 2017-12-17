@@ -9,18 +9,18 @@ function init() {
         //function (error, hand_data) {
             //if (error) throw error;   Do we need error check? where?
 
-    //Starting with plotting a single hand column from hands_xy_flipped.txt . As there is no header is has to be read with tsvParseRows
+    //Starting with plotting a single hand (row) from hands.csv . As there is no header is has to be read with tsvParseRows
     d3.text('hands_xy_flipped.txt', function(text) {
         var hand_data = d3.tsvParseRows(text, function(d) {
             return d[0];
         });
 
         /* hand_data is now an array of 56 "x,y" hand coordinate pairs.
-        It is the first COLUMN of hands_xy_flipped.txt, I was thinking it would be nice to start with plotting 1 hand
+        It is the first COLUMN of hands_xy_flipped.txt, I was thinking it would be nice to plot 1 hand
         The combined coordinates of each COLUMN in the file show a hand.
         The coordinates are seperated by a comma and can be split with the following:
          */
-        var coords = d3.csvParseRows(hand_data.join());
+        var coords = d3.csvParseRows(hand_data.join())[0];
         //BUT we need to select each PAIR before we split them like this, I think
 
         //Just to view data in console
@@ -28,12 +28,14 @@ function init() {
         console.log(coords);
         //var xs = hand_data.slice(0,56);  old shit, ignore these 2 lines
         //var ys = hand_data.slice(57);
+        console.log(d3.max(hand_data));
+        console.log(d3.max(coords)); //this is the only list I think it makes sense to check max on
 
             var xScale = d3.scaleLinear()
                 .domain([0,
-                    d3.max(hand_data,  //may need to check another max, not sure, but it depends on input below
+                    d3.max(coords,  //may need to check another max, not sure, but it depends on input below
                         function (d) {
-                        console.log(d[0])
+                        console.log(d[0]);
                             return (d)[0];
                         })])
                 .range([padding, width - padding]);
@@ -48,15 +50,19 @@ function init() {
 */
 
         var yScale = d3.scaleLinear()
-                .domain([d3.min(hand_data,
+                .domain([d3.min(coords,
                     function (d) {
                         return d[1];
                     }),
-                    d3.max(hand_data,
+                    d3.max(coords,
                         function (d) {
                             return d[1];
                         })])
                 .range([height - padding, padding]);
+
+        function xyRead(pair) {
+            return d3.csvParseRows(pair)[0]; //parses string 'x,y' and returns list [x,y]
+        }
 
             d3.select('#hand')
                 .selectAll('circle')
@@ -64,15 +70,13 @@ function init() {
                 .enter()
                 .append('circle')
                 .attr('r', '3px')
-                //.join()
-                //.d3.csvParseRows() We need to do some sort of selection here that splits the pair before
-                //                   we can pass it off to the functions below
                 .attr('cx', function (d) {
-                    return '' + xScale(d[0]) + 'px';
+                    console.log(xyRead(d)[0]);
+                    return '' + xScale(xyRead(d)[0]) + 'px'; //passes x coordinate to xScale
                 })
                 .attr('cy', function (d) {
-                    return '' + yScale(d[1]) + 'px';
-                })
+                    return '' + yScale(xyRead(d)[1]) + 'px'; //passes y coordinate to yScale
+                });
 
 
 
