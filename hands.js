@@ -9,14 +9,14 @@ function init() {
         //function (error, hand_data) {
             //if (error) throw error;   Do we need error check? where?
 
-    //Starting with plotting a single hand (row) from hands.csv . As there is no header is has to be read with tsvParseRows
+    //Starting with plotting a single hand column from hands_xy_flipped.txt . As there is no header is has to be read with tsvParseRows
     d3.text('hands_xy_flipped.txt', function(text) {
         var hand_data = d3.tsvParseRows(text, function(d) {
             return d[0];
         });
 
         /* hand_data is now an array of 56 "x,y" hand coordinate pairs.
-        It is the first COLUMN of hands_xy_flipped.txt, I was thinking it would be nice to plot 1 hand
+        It is the first COLUMN of hands_xy_flipped.txt, I was thinking it would be nice to start with plotting 1 hand
         The combined coordinates of each COLUMN in the file show a hand.
         The coordinates are seperated by a comma and can be split with the following:
          */
