@@ -6,88 +6,83 @@ function init() {
     var height = parseFloat(vis1.node().style.height);
     var padding = 15;
 
-        //function (error, hand_data) {
-            //if (error) throw error;   Do we need error check? where?
+    var pca_index = 13;
 
-    //Starting with plotting a single hand (row) from hands.csv . As there is no header is has to be read with tsvParseRows
-    d3.text('hands_xy_flipped.txt', function(text) {
-        var hand_data = d3.tsvParseRows(text, function(d) {
-            return d[0];
+    function transpose(a) {
+        // http://www.codesuck.com/2012/02/transpose-javascript-array-in-one-line.html
+        return Object.keys(a[0]).map(function(c) {
+            return a.map(function(r) { return r[c]; });
         });
+    }
 
-        /* hand_data is now an array of 56 "x,y" hand coordinate pairs.
-        It is the first COLUMN of hands_xy_flipped.txt, I was thinking it would be nice to plot 1 hand
-        The combined coordinates of each COLUMN in the file show a hand.
-        The coordinates are seperated by a comma and can be split with the following:
-         */
-        var coords = d3.csvParseRows(hand_data.join())[0];
-        //BUT we need to select each PAIR before we split them like this, I think
+    function zip(arrays) {
+        return arrays[0].map(function(_,i){
+            return arrays.map(function(array){return array[i]})
+        });
+    }
 
-        //Just to view data in console
-        console.log(hand_data);
-        console.log(coords);
-        //var xs = hand_data.slice(0,56);  old shit, ignore these 2 lines
-        //var ys = hand_data.slice(57);
-        console.log(d3.max(hand_data));
-        console.log(d3.max(coords)); //this is the only list I think it makes sense to check max on
 
-            var xScale = d3.scaleLinear()
-                .domain([0,
-                    d3.max(coords,  //may need to check another max, not sure, but it depends on input below
-                        function (d) {
-                        console.log(d[0]);
-                            return (d)[0];
-                        })])
-                .range([padding, width - padding]);
-/*
-        var xScale = d3.scaleLinear()          backup copy paste cause I forget
+    d3.text("hands.csv", function(text) {
+        var data = d3.csvParseRows(text, function(d) {
+            return d.map(Number);
+        });
+        // Now do something with data
+
+        this_hand = data[pca_index];
+        x_array = this_hand.slice(0, this_hand.length/2);
+        y_array = this_hand.slice(this_hand.length/2, this_hand.length);
+        zipped_xy = zip([x_array, y_array]);
+
+
+        /*console.log("see here mate:");
+        console.log(this_hand);
+        console.log(this_hand.length);
+        console.log(x_array.length);
+        console.log(x_array);
+        console.log(y_array.length);
+        console.log(y_array);*/
+
+
+
+        var xScale = d3.scaleLinear()
             .domain([0,
-                d3.max(hand_data,
+                d3.max(zipped_xy,  //may need to check another max, not sure, but it depends on input below
                     function (d) {
-                        return d[0];
+                        return (d)[0];
                     })])
             .range([padding, width - padding]);
-*/
 
         var yScale = d3.scaleLinear()
-                .domain([d3.min(coords,
+            .domain([d3.min(zipped_xy,
+                function (d) {
+                    return d[1];
+                }),
+                d3.max(zipped_xy,
                     function (d) {
                         return d[1];
-                    }),
-                    d3.max(coords,
-                        function (d) {
-                            return d[1];
-                        })])
-                .range([height - padding, padding]);
+                    })])
+            .range([height - padding, padding]);
 
-        function xyRead(pair) {
-            return d3.csvParseRows(pair)[0]; //parses string 'x,y' and returns list [x,y]
-        }
 
-            d3.select('#hand')
-                .selectAll('circle')
-                .data(hand_data)
-                .enter()
-                .append('circle')
-                .attr('r', '3px')
-                .attr('cx', function (d) {
-                    console.log(xyRead(d)[0]);
-                    return '' + xScale(xyRead(d)[0]) + 'px'; //passes x coordinate to xScale
-                })
-                .attr('cy', function (d) {
-                    return '' + yScale(xyRead(d)[1]) + 'px'; //passes y coordinate to yScale
-                });
+
+        d3.select('#hand')
+            .selectAll('circle')
+            .data(zipped_xy)
+            .enter()
+            .append('circle')
+            .attr('r', '3px')
+            .attr('cx', function (d) {
+
+                return '' + xScale(d[0]) + 'px';
+
+            })
+            .attr('cy', function (d) {
+                return '' + yScale(d[1]) + 'px';
+            })
 
 
 
 
-             //We probably don't need axis, but just to see if it changes anything
+    });
 
-            d3.select('#hand')
-                .append('g')
-                .call(d3.axisBottom(xScale));
-            d3.select('#hand')
-                .append('g')
-                .call(d3.axisRight(yScale));
-        });
 }
