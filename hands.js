@@ -119,10 +119,6 @@ function init() {
             index_y = new_pca_index2;
             // in each row, takes these two indeces.
 
-
-
-
-
             var pca_xScale = d3.scaleLinear()
                 .domain([0,
                     d3.max(pca_data,
@@ -142,13 +138,9 @@ function init() {
                         })])
                 .range([height_vis2 - padding, padding]);
 
-
-
             var pca_circles = d3.select('#pca')
                 .selectAll('circle')
                 .data(pca_data);
-
-
 
             pca_circles.enter()
                 .append('circle')
@@ -188,7 +180,7 @@ function init() {
                 })
                 .on("mouseout", function(){
                     d3.select(".tooltip")
-                        //.style('visibility', 'hidden');
+                        .style('visibility', 'hidden');
                 });
 
         });
