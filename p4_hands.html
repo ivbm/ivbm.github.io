@@ -26,19 +26,34 @@
             font-size: 25px;
         }
 
+        #viz {
+
+            display: table-cell;
+
+        }
+
+        .viz_child {
+
+            float: left;
+
+        }
+
     </style>
 </head>
 <body>
 <h1>Visualising Hands</h1>
-<svg id='hand' style='width: 500px; height: 500px'></svg>
-<svg id='pca' style='width: 500px; height: 500px'></svg>
 
-<div id="p1" class="selection">
-    <!--<p style="color: black;">PCs:</p>-->
+<div id="viz">
 
+<svg class="viz_child" id='hand' style='width: 500px; height: 500px'></svg>
+<svg class="viz_child" id='pca' style='width: 500px; height: 500px'></svg>
+
+<div class="viz_child" id="p1" class="selection">
     <ul>
         <li style="color: black">PCs:</li>
     </ul>
+
+</div>
 
 </div>
 
