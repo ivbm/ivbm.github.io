@@ -25,11 +25,6 @@
             max-width: 30cm;
         }
 
-        #handInfo
-        {
-            font-size: 25px;
-        }
-
         #viz {
             display: table-cell;
         }
@@ -86,7 +81,7 @@
 <div id="viz">
 
     <svg class="viz_child" id='hand' style='width: 500px; height: 500px'></svg>
-    <div class="viz_child" id='tooltipRel'>
+    <div id='tooltipRel'>
         <svg id ='pca' style='width: 500px; height: 500px'></svg>
         <div class="tooltip"></div>
     </div>
@@ -100,7 +95,6 @@
 </div>
 
 <p>Press on a number tuple on the far right to choose which Principal Components you want to visualize.</p>
-<p id="handInfo">Handinfo</p>
 <h2>Visualization description, results and conclusion:</h2>
 <p>The dataset, on which this visualization is based, contains: </p>
 <p> - a csv file with 40 rows, each representing the shape of a hand. Each row has 112 dimensions (the first 56 are the x coordinates while the next ones are the y coordinates) </p>
