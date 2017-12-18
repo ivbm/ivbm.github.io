@@ -38,6 +38,13 @@
 
         }
 
+        ul {
+            display: table;
+        }
+        ul li {
+            display: table-row;
+        }
+
     </style>
 </head>
 <body>
@@ -49,7 +56,7 @@
 <svg class="viz_child" id='pca' style='width: 500px; height: 500px'></svg>
 
 <div class="viz_child" id="p1" class="selection">
-    <ul>
+    <ul style="height: 500px">
         <li style="color: black">PCs:</li>
     </ul>
 
@@ -57,7 +64,8 @@
 
 </div>
 
-<p>Press on dot on the right and change the hand. You can see the index under this text, when pressed.</p>
+<p>Press a point on the right plot and change the hand on the left. You can see the index of the row under this text, when pressed.</p>
+<p>Press on a number tuple on the far right to choose which Principal Components you want to visualize.</p>
 <p id="handInfo">Visualization description, results and conclusion:</p>
 <p>The dataset, on which this visualization is based, contains: </p>
  <p> - a csv file with 40 rows, each representing the shape of a hand. Each row has 112 dimensions (the first 56 are the x coordinates while the next ones are the y coordinates) </p>
@@ -75,8 +83,8 @@
 
 </p>
 <h3>Contributions</h3>
-<p>Mihaela: <br/>
-Søren: <br/>
-Veronica: Change colour on selected PCA </p>
+<p>Mihaela: Show index of row when a point is clicked on the PCA-plot. <br/>
+Søren: Change the selected Principal Components. <br/>
+Veronica: Change colour on selected PCA. </p>
 </body>
 </html>
