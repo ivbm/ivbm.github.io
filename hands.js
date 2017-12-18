@@ -9,7 +9,7 @@ function init() {
     var width_vis2 = parseFloat(vis2.node().style.width);
     var height_vis2 = parseFloat(vis2.node().style.height);
 
-    var padding = 15;
+    var padding = 150;
 
 
     // The index of the pca-coordinates.
