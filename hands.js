@@ -172,7 +172,7 @@ function init() {
                     d3.select(this).attr('fill','red');
 
 
-                });
+                })
                 /*.append('title')
                 .text(function(d,i) {
                     return "Index " + i;
@@ -189,7 +189,7 @@ function init() {
                 .on("mouseout", function(){
                     d3.select(".tooltip")
                         //.style('visibility', 'hidden');
-                })
+                });
 
         });
     }
