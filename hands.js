@@ -173,6 +173,24 @@ function init() {
 
 
                 });
+                /*.append('title')
+                .text(function(d,i) {
+                    return "Index " + i;
+                })*/
+                .on("mouseover", function(d,i){
+                    d3.select(".tooltip")
+                        .style('visibility', 'visible')
+                        .text("Index " + i)
+                        .style('left', '' + pca_xScale(d[index_x]) + 'px')
+                        .style('top', '' + (pca_yScale(d[index_y])-3) + 'px');
+
+
+                })
+                .on("mouseout", function(){
+                    d3.select(".tooltip")
+                        //.style('visibility', 'hidden');
+                })
+
         });
     }
 
