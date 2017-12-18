@@ -103,76 +103,118 @@ function init() {
     updateHand(pca_index);
 
 
+    function updatePCA(new_pca_index1, new_pca_index2) {
+        // Plot the pca:
 
+        d3.text("hands_pca.csv", function(text) {
+            var pca_data = d3.csvParseRows(text, function(d) {
+                return d.map(Number);
+            });
 
-    // Plot the pca:
+            console.log("Pca is right here maaaaaaaaaaaaaaaaaaaaaaaaaaayn:");
+            console.log(pca_data);
 
-    d3.text("hands_pca.csv", function(text) {
-        var pca_data = d3.csvParseRows(text, function(d) {
-            return d.map(Number);
-        });
-
-        console.log("Pca is right here maaaaaaaaaaaaaaaaaaaaaaaaaaayn:");
-        console.log(pca_data);
-
-        // Which Principal Components to take? We start with PC 0 and PC 1:
-        index_x = 0;
-        index_y = 1;
-        // in each row, takes these two indeces.
-
-
+            // Which Principal Components to take? We start with PC 0 and PC 1:
+            index_x = new_pca_index1;
+            index_y = new_pca_index2;
+            // in each row, takes these two indeces.
 
 
 
-        var pca_xScale = d3.scaleLinear()
-            .domain([0,
-                d3.max(pca_data,
-                    function (d) {
-                        return d[index_x];
-                    })])
-            .range([padding, width_vis2 - padding]);
 
-        var pca_yScale = d3.scaleLinear()
-            .domain([d3.min(pca_data,
-                function (d) {
-                    return d[index_y];
-                }),
-                d3.max(pca_data,
+
+            var pca_xScale = d3.scaleLinear()
+                .domain([0,
+                    d3.max(pca_data,
+                        function (d) {
+                            return d[index_x];
+                        })])
+                .range([padding, width_vis2 - padding]);
+
+            var pca_yScale = d3.scaleLinear()
+                .domain([d3.min(pca_data,
                     function (d) {
                         return d[index_y];
-                    })])
-            .range([height_vis2 - padding, padding]);
+                    }),
+                    d3.max(pca_data,
+                        function (d) {
+                            return d[index_y];
+                        })])
+                .range([height_vis2 - padding, padding]);
 
 
 
-        var pca_circles = d3.select('#pca')
-            .selectAll('circle')
-            .data(pca_data);
+            var pca_circles = d3.select('#pca')
+                .selectAll('circle')
+                .data(pca_data);
 
 
 
-        pca_circles.enter()
-            .append('circle')
-            .attr('r', '4px')
-            .merge(pca_circles)
-            .attr('cx', function (d) {
+            pca_circles.enter()
+                .append('circle')
+                .attr('r', '4px')
+                .merge(pca_circles)
+                .attr('cx', function (d) {
 
-                return '' + pca_xScale(d[index_x]) + 'px';
+                    return '' + pca_xScale(d[index_x]) + 'px';
 
-            })
-            .attr('cy', function (d) {
-                return '' + pca_yScale(d[index_y]) + 'px';
-            })
-            .on("click", function(d, i) {
+                })
+                .attr('cy', function (d) {
+                    return '' + pca_yScale(d[index_y]) + 'px';
+                })
+                .on("click", function(d, i) {
 
-                updateHand(i);
-                d3.select("body")
-                    .select("#handInfo")
-                    .text("" + i);
-                d3.select('#pca').selectAll('circle').attr('fill','black');
-                d3.select(this).attr('fill','red');
+                    updateHand(i);
+                    d3.select("body")
+                        .select("#handInfo")
+                        .text("" + i);
+                    d3.select('#pca').selectAll('circle').attr('fill','black');
+                    d3.select(this).attr('fill','red');
 
 
-            });
-    });
+                });
+        });
+    }
+
+    // First pca-plot:
+    updatePCA(pca_index, pca_index + 1);
+
+
+
+    some_data = d3.range(-1, 20);
+    console.log("here is the range:");
+    console.log(some_data);
+
+
+    d3.select("#p1").select("ul")
+        .selectAll("li")
+        .data(some_data)
+        .enter()
+        .append("li")
+        .text(function (d) {
+            return "" + d + " , " + (d + 1);
+        })
+        .on("click", function(d, i) {
+
+            d3.select("#p1").select("ul")
+                .selectAll("li").style("color", "black");
+
+            d3.select(this)
+                .style("color", "red");
+
+            updatePCA(d, d+1);
+
+
+        });
+
+    d3.select("#p1").select("ul")
+        .selectAll("li")
+        .style("color", function (d, i) {
+            if (i === 1) {
+                return "red";
+            }
+            else {
+                return "black";
+            }
+        });
 }
