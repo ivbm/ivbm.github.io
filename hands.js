@@ -4,12 +4,12 @@ function init() {
     var vis1 = d3.select('#hand');
     var width_vis1 = parseFloat(vis1.node().style.width);
     var height_vis1 = parseFloat(vis1.node().style.height);
+    var pad_vis1 = 20;
 
     var vis2 = d3.select('#pca');
     var width_vis2 = parseFloat(vis2.node().style.width);
     var height_vis2 = parseFloat(vis2.node().style.height);
-
-    var padding = 150;
+    var pad_vis2 = 150;
 
 
     // The index of the pca-coordinates.
@@ -27,14 +27,14 @@ function init() {
             x_array = this_hand.slice(0, this_hand.length/2);
             y_array = this_hand.slice(this_hand.length/2, this_hand.length);
             zipped_xy = d3.zip(x_array, y_array);
-            
+
             var xScale = d3.scaleLinear()
                 .domain([0,
                     d3.max(zipped_xy,
                         function (d) {
                             return (d)[0];
                         })])
-                .range([padding, width_vis1 - padding]);
+                .range([pad_vis1, width_vis1 - pad_vis1]);
 
             var yScale = d3.scaleLinear()
                 .domain([d3.min(zipped_xy,
@@ -45,7 +45,7 @@ function init() {
                         function (d) {
                             return d[1];
                         })])
-                .range([height_vis1 - padding, padding]);
+                .range([height_vis1 - pad_vis1, pad_vis1]);
 
             var circles = d3.select('#hand')
                 .selectAll('circle')
@@ -125,7 +125,7 @@ function init() {
                         function (d) {
                             return d[index_x];
                         })])
-                .range([padding, width_vis2 - padding]);
+                .range([pad_vis2, width_vis2 - pad_vis2]);
 
             var pca_yScale = d3.scaleLinear()
                 .domain([d3.min(pca_data,
@@ -136,7 +136,7 @@ function init() {
                         function (d) {
                             return d[index_y];
                         })])
-                .range([height_vis2 - padding, padding]);
+                .range([height_vis2 - pad_vis2, pad_vis2]);
 
             var pca_circles = d3.select('#pca')
                 .selectAll('circle')
