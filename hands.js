@@ -191,7 +191,7 @@ function init() {
 
 
 
-    some_data = d3.range(-1, 20);
+    some_data = d3.range(-1, 38);
     console.log("here is the range:");
     console.log(some_data);
 
