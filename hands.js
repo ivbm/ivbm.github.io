@@ -190,15 +190,14 @@ function init() {
     updatePCA(pca_index, pca_index + 1);
 
 
-
-    some_data = d3.range(-1, 38);
+    some_data1 = d3.range(-1, 19);
     console.log("here is the range:");
-    console.log(some_data);
+    console.log(some_data1);
 
 
     d3.select("#p1").select("ul")
         .selectAll("li")
-        .data(some_data)
+        .data(some_data1)
         .enter()
         .append("li")
         .text(function (d) {
@@ -208,6 +207,8 @@ function init() {
 
             d3.select("#p1").select("ul")
                 .selectAll("li").style("color", "black");
+            d3.select("#p2").select("ul")
+                .selectAll("li").style("color", "black");
 
             d3.select(this)
                 .style("color", "red");
@@ -216,6 +217,39 @@ function init() {
 
 
         });
+
+    some_data2 = d3.range(19, 38);
+    console.log("here is the range:");
+    console.log(some_data2);
+
+
+    d3.select("#p2").select("ul")
+        .selectAll("li")
+        .data(some_data2)
+        .enter()
+        .append("li")
+        .text(function (d) {
+            return "" + d + " , " + (d + 1);
+        })
+        .on("click", function(d, i) {
+
+            d3.select("#p1").select("ul")
+                .selectAll("li").style("color", "black");
+            d3.select("#p2").select("ul")
+                .selectAll("li").style("color", "black");
+
+            d3.select(this)
+                .style("color", "red");
+
+            updatePCA(d, d+1);
+
+
+        });
+
+
+
+
+
 
     d3.select("#p1").select("ul")
         .selectAll("li")
