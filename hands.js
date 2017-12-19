@@ -11,7 +11,6 @@ function init() {
     var height_vis2 = parseFloat(vis2.node().style.height);
     var pad_vis2 = 150;
 
-
     // The index of the pca-coordinates.
     var pca_index = 0;
 
@@ -87,8 +86,6 @@ function init() {
                     .style("stroke", "#000")
                     .attr("d", line(zipped_xy));
 
-
-
             });
             vis1.on("mouseout", function() {
 
@@ -97,7 +94,6 @@ function init() {
             });
         });
     }
-
 
     // Generates the first hand:
     updateHand(pca_index);
@@ -214,8 +210,6 @@ function init() {
                 .style("color", "red");
 
             updatePCA(d, d+1);
-
-
         });
 
     some_data2 = d3.range(19, 38);
@@ -245,11 +239,6 @@ function init() {
 
 
         });
-
-
-
-
-
 
     d3.select("#p1").select("ul")
         .selectAll("li")
