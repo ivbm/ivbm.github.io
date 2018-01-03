@@ -60,9 +60,15 @@ function create_points(svg,projection, weekday) {
             .data(crimes.features
                 .filter(function (d) {
 
-                    if (d.properties.DayOfWeek === weekday) {
+                    if (weekday === "Whole week") {
                         return d;
-                    }}));
+                    } else {
+                        if (d.properties.DayOfWeek === weekday) {
+                            return d;
+                        }
+                    }
+
+                }));
 
         circles.enter()
             .append("circle")
@@ -83,8 +89,9 @@ function create_points(svg,projection, weekday) {
                 } else {
                     return "black";
                 }
-            })
+            });
 
+        circles.exit().remove();
 
 
     });
@@ -125,7 +132,8 @@ function init() {
                             4: "Thursday",
                             5: "Friday",
                             6: "Saturday",
-                            7: "Sunday"};
+                            7: "Sunday",
+                            8: "Whole week"};
 
     var slider = document.getElementById("myRange");
 
