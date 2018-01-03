@@ -68,7 +68,6 @@ function create_points(svg,projection, weekday) {
             .append("circle")
             .attr("r",2)
             .merge(circles)
-            .transition()
             .attr("cx", function(d){
                 return projection(d.geometry.coordinates)[0]
             })
