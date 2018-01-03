@@ -17,7 +17,7 @@ function create_map(svg, path) {
 
 }
 
-function create_points(svg,projection) {
+function create_points(svg,projection, weekday) {
 
     d3.json("sf_crime.geojson", function(crimes) {
 
@@ -55,7 +55,12 @@ function create_points(svg,projection) {
 
 
         svg.selectAll("circle")
-            .data(crimes.features)
+            .data(crimes.features
+                .filter(function (d) {
+
+                    if (d.properties.DayOfWeek === weekday) {
+                        return d;
+                    }}))
             .enter()
             .append("circle")
             .attr("cx", function(d){
@@ -85,6 +90,9 @@ function init() {
 
     svg = d3.select('#map');
 
+    var weekday = "Tuesday";
+    //var weekday = "Wednesday";
+
     //Width and height
     var w = 500;
     var h = 500;
@@ -103,7 +111,7 @@ function init() {
 
     create_map(svg, path);
 
-    create_points(svg, projection);
+    create_points(svg, projection, weekday);
 
 }
 
