@@ -21,25 +21,17 @@ function create_points(svg,projection, weekday) {
 
     d3.json("sf_crime.geojson", function(crimes) {
 
-        var categToNumber = new Map();
+        /*var categToNumber = new Map();
 
         var all_categories = new Set();
-
-        var violent_cats = new Set(["ASSAULT",
-            "ROBBERY",
-            "SEX OFFENSES FORCIBLE",
-            "KIDNAPPING",
-            "ARSON",
-            "EXTORTION",
-            "SUICIDE"]);
 
         for(var i =0; i<crimes.features.length;i++)
         {
             var elem = crimes.features[i].properties.Category;
 
-            /*console.log("###############");
+            /!*console.log("###############");
             console.log(elem);
-            console.log("###############");*/
+            console.log("###############");*!/
 
             all_categories.add(elem);
 
@@ -50,26 +42,39 @@ function create_points(svg,projection, weekday) {
         }
 
         console.log(categToNumber);
-        console.log(all_categories);
+        console.log(all_categories);*/
+
+
+        var violent_cats = new Set(["ASSAULT",
+            "ROBBERY",
+            "SEX OFFENSES FORCIBLE",
+            "KIDNAPPING",
+            "ARSON",
+            "EXTORTION",
+            "SUICIDE"]);
+
         console.log(violent_cats);
 
 
-        svg.selectAll("circle")
+        var circles = svg.selectAll("circle")
             .data(crimes.features
                 .filter(function (d) {
 
                     if (d.properties.DayOfWeek === weekday) {
                         return d;
-                    }}))
-            .enter()
+                    }}));
+
+        circles.enter()
             .append("circle")
+            .attr("r",2)
+            .merge(circles)
+            .transition()
             .attr("cx", function(d){
                 return projection(d.geometry.coordinates)[0]
             })
             .attr("cy", function(d){
                 return projection(d.geometry.coordinates)[1]
             })
-            .attr("r",2)
             .attr("fill", function(d){
 
                 if (violent_cats.has(d.properties.Category)) {
@@ -79,8 +84,9 @@ function create_points(svg,projection, weekday) {
                 } else {
                     return "black";
                 }
-
             })
+
+
 
     });
 
@@ -90,7 +96,7 @@ function init() {
 
     svg = d3.select('#map');
 
-    var weekday = "Tuesday";
+    var weekday = "Monday";
     //var weekday = "Wednesday";
 
     //Width and height
@@ -112,6 +118,33 @@ function init() {
     create_map(svg, path);
 
     create_points(svg, projection, weekday);
+
+    var numberToWeekday = {
+                            1: "Monday",
+                            2: "Tuesday",
+                            3: "Wednesday",
+                            4: "Thursday",
+                            5: "Friday",
+                            6: "Saturday",
+                            7: "Sunday"};
+
+    var slider = document.getElementById("myRange");
+
+    slider.oninput = function() {
+        //output.innerHTML = numberToWeekday[this.value];
+
+        new_weekday = numberToWeekday[this.value];
+
+        console.log(this.value);
+        console.log(new_weekday);
+
+        d3.select("#slider_value").text(new_weekday);
+
+        create_points(svg, projection, new_weekday);
+
+    }
+
+
 
 }
 
