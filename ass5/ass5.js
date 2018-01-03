@@ -66,12 +66,6 @@ function init() {
             console.log(all_categories);
             console.log(violent_cats);
 
-
-
-
-
-
-
             svg.selectAll("circle")
                 .data(crimes.features)
                 .enter()
@@ -82,7 +76,7 @@ function init() {
                 .attr("cy", function(d){
                     return projection(d.geometry.coordinates)[1]
                 })
-                .attr("r",1)
+                .attr("r",2)
                 .attr("fill", function(d){
 
                     if (violent_cats.has(d.properties.Category)) {
