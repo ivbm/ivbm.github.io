@@ -4,8 +4,6 @@ global_weekday = "Monday";
 global_hour = ["00", "01", "02"];
 
 function create_map(svg, path) {
-
-    //d3.json("sfpd_districts.json", function(json) {
     d3.json("SanFrancisco.Neighborhoods.json", function(json) {
 
         //Bind data and create one path per GeoJSON feature
@@ -15,38 +13,12 @@ function create_map(svg, path) {
             .append("path")
             .attr("d", path)
             .style("fill", "steelblue");
-
     });
-
 }
 
 function create_points(svg,projection, weekday, hour) {
 
     d3.json("sf_crime.geojson", function(crimes) {
-
-        /*var categToNumber = new Map();
-
-        var all_categories = new Set();
-
-        for(var i =0; i<crimes.features.length;i++)
-        {
-            var elem = crimes.features[i].properties.Category;
-
-            /!*console.log("###############");
-            console.log(elem);
-            console.log("###############");*!/
-
-            all_categories.add(elem);
-
-            if(!categToNumber.has(elem))
-            {
-                categToNumber.set(elem, categToNumber.size)
-            }
-        }
-
-        console.log(categToNumber);
-        console.log(all_categories);*/
-
 
         var violent_cats = new Set(["ASSAULT",
             "ROBBERY",
@@ -56,58 +28,10 @@ function create_points(svg,projection, weekday, hour) {
             "EXTORTION",
             "SUICIDE"]);
 
-        console.log(violent_cats);
-
-        /*.filter(function (d) {
-
-                if (hour === "Whole day") {
-                    return d;
-                } else {
-                    if (d.properties.Dates.slice(11,13) in hour) {
-                        return d;
-                    }
-                }
-
-            })*/
-
-
-        /*var circles = svg.selectAll("circle")
-            .data(crimes.features
-                .filter(function (d) {
-
-                    if (weekday === "Whole week") {
-                        return d;
-                    } else {
-                        if (d.properties.DayOfWeek === weekday) {
-                            return d;
-                        }
-                    }
-
-                })
-            );
-
-        circles
-            .filter(function (d) {
-
-                console.log("nice stuff here:");
-                console.log(hour);
-                console.log(d.properties.Dates.slice(11,13));
-                console.log(  Object.prototype.toString.call(d.properties.Dates.slice(11,13))  );
-
-
-
-                if (hour === "Whole day") {
-                    console.log("reaches A");
-                    return d;
-                } else {
-                    console.log("reaches B");
-                    if (hour.includes(d.properties.Dates.slice(11,13))) {
-                        console.log("reaches C");
-                        return d;
-                    }
-                }
-
-        });*/
+        var thieving_cats = new Set(['BURGLARY',
+            'LARCENY/THEFT',
+            'STOLEN PROPERTY',
+            'VEHICLE THEFT']);
 
         var circles = svg.selectAll("circle")
             .data(crimes.features
@@ -141,7 +65,6 @@ function create_points(svg,projection, weekday, hour) {
                 })
             );
 
-
         circles.enter()
             .append("circle")
             .attr("r",2)
@@ -152,22 +75,21 @@ function create_points(svg,projection, weekday, hour) {
             .attr("cy", function(d){
                 return projection(d.geometry.coordinates)[1]
             })
-            .attr("fill", function(d){
+            .style('fill', 'none')
+            .attr("stroke", function(d){
 
                 if (violent_cats.has(d.properties.Category)) {
                     return "red";
                 } else if (d.properties.Category === "PROSTITUTION") {
                     return "orange";
+                } else if (thieving_cats.has(d.properties.Category)) {
+                    return "magenta";
                 } else {
                     return "black";
                 }
             });
-
         circles.exit().remove();
-
-
     });
-
 }
 
 function init() {
@@ -175,27 +97,29 @@ function init() {
     console.log("2013-09-03 08:00:00".slice(11,13));
 
 
-    svg = d3.select('#map');
+    //svg = d3.select('#map');
 
     var weekday = global_weekday;
     var hour = global_hour;
 
-    console.log("first here:");
-    console.log(global_weekday);
-    console.log(weekday);
-    console.log("end");
-
-
-    //Width and height
-    var w = 500;
-    var h = 500;
+    //Getting width and height from html element, + zooming, yay
+    var svg = d3.select("svg")
+            .append("svg")
+            .attr("width", "100%")
+            .attr("height", "100%")
+            .call(d3.zoom().on("zoom", function () {
+                svg.attr("transform", d3.event.transform)
+            }))
+            .append("g"),
+        w = +svg.attr("width"),
+        h = +svg.attr("height");
 
     //projection
     projection = d3.geoMercator()
-        .center([-122.433701, 37.767683])
-        .scale(170000)
-        //.translate([width / 1.95, height / 1.65]);
-        .translate([w/2, h/2]);
+        .center([-122.410217, 37.780755 ])
+        .scale(250000);
+        //.translate([width/1.95, height / 1.65]);
+        //.translate([w/2, h/2]);
     //.scale([w * 0.16]);
 
     //path
@@ -206,15 +130,16 @@ function init() {
 
     create_points(svg, projection, weekday, hour);
 
+
     var numberToWeekday = {
-                            1: "Monday",
-                            2: "Tuesday",
-                            3: "Wednesday",
-                            4: "Thursday",
-                            5: "Friday",
-                            6: "Saturday",
-                            7: "Sunday",
-                            8: "Whole week"};
+        1: "Monday",
+        2: "Tuesday",
+        3: "Wednesday",
+        4: "Thursday",
+        5: "Friday",
+        6: "Saturday",
+        7: "Sunday",
+        8: "Whole week"};
 
     var slider = document.getElementById("weekRange");
 
@@ -235,15 +160,15 @@ function init() {
     };
 
     var numberToHour = {
-                        1: ["00", "01", "02"],
-                        2: ["03", "04", "05"],
-                        3: ["06", "07", "08"],
-                        4: ["09", "10", "11"],
-                        5: ["12", "13", "14"],
-                        6: ["15", "16", "17"],
-                        7: ["18", "19", "20"],
-                        8: ["21", "22", "23"],
-                        9: "Whole day"};
+        1: ["00", "01", "02"],
+        2: ["03", "04", "05"],
+        3: ["06", "07", "08"],
+        4: ["09", "10", "11"],
+        5: ["12", "13", "14"],
+        6: ["15", "16", "17"],
+        7: ["18", "19", "20"],
+        8: ["21", "22", "23"],
+        9: "Whole day"};
 
     var slider2 = document.getElementById("hourRange");
 
@@ -265,12 +190,5 @@ function init() {
         console.log("end");
 
         create_points(svg, projection, global_weekday, hours);
-
-
     };
-
-
-
 }
-
-
