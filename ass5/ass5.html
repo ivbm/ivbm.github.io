@@ -8,16 +8,27 @@
     <style>
         body {
             padding-left: 0.5cm;
+            padding: 0;
+            margin: 0;
             font-family: Tahoma, Geneva, sans-serif;
         }
 
         svg {
             border: 1px solid black;
             cursor: move;
+            display: inline-block;
         }
+
+        div {
+            display: inline-block;
+            vertical-align: top;
+        }
+
 
         .slidecontainer {
             width: 500px;
+            display: block;
+            padding-bottom: 1cm;
         }
 
         .slider {
@@ -51,25 +62,30 @@
             cursor: pointer;
         }
 
+        .label {
+            font-style: italic;
+            margin: 0;
+            padding-left: 1.5cm;
+        }
+
     </style>
 </head>
 <body>
 <h1>San Francisco Crime</h1>
 <div>
-
     <svg id='map' style='width: 750px; height: 750px'></svg>
-
 </div>
+<div>
+    <p id="howto">Drag the sliders to change the week day and hour of day.</p>
+    <div class="slidecontainer">
+        <p id="week_slider_value" class="label">Monday</p>
+        <input type="range" min="1" max="8" value="1" class="slider" id="weekRange">
 
-<p>Drag the sliders to change the week day and hour of day.</p>
-
-<div class="slidecontainer">
-    <input type="range" min="1" max="8" value="1" class="slider" id="weekRange">
-    <p id="week_slider_value">Monday</p>
-</div>
-<div class="slidecontainer">
-    <input type="range" min="1" max="9" value="1" class="slider" id="hourRange">
-    <p id="hour_slider_value">00:00-03:00</p>
+    </div>
+    <div class="slidecontainer">
+        <p id="hour_slider_value" class="label">00-03</p>
+        <input type="range" min="1" max="9" value="1" class="slider" id="hourRange">
+    </div>
 </div>
 
 </body>
