@@ -93,12 +93,7 @@ function create_points(svg,projection, weekday, hour) {
 }
 
 function init() {
-
-    console.log("2013-09-03 08:00:00".slice(11,13));
-
-
-    //svg = d3.select('#map');
-
+    
     var weekday = global_weekday;
     var hour = global_hour;
 
@@ -150,8 +145,6 @@ function init() {
 
         global_weekday = new_weekday;
 
-        console.log(this.value);
-        console.log(new_weekday);
 
         d3.select("#week_slider_value").text(new_weekday);
 
@@ -174,20 +167,12 @@ function init() {
 
     slider2.oninput = function() {
 
-        //var hours = numberToHour[this.value];
         var hours = numberToHour[this.value];
 
         global_hour = hours;
 
-        console.log(this.value);
-        console.log(hours);
-
-        d3.select("#hour_slider_value").text(hours.toString());
-
-        console.log("here:");
-        console.log(global_hour);
-        console.log(hours);
-        console.log("end");
+        if (typeof(hours) === 'string'){d3.select("#hour_slider_value").text(hours);}
+        else d3.select("#hour_slider_value").text(hours[0].toString() + '-' + (hours[2][0]+ (+hours[2][1]+1)).toString());
 
         create_points(svg, projection, global_weekday, hours);
     };
