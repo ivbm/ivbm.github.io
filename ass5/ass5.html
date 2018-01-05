@@ -8,8 +8,6 @@
     <style>
         body {
             padding-left: 0.5cm;
-            padding: 0;
-            margin: 0;
             font-family: Tahoma, Geneva, sans-serif;
         }
 
@@ -68,6 +66,16 @@
             padding-left: 1.5cm;
         }
 
+        p {
+            max-width: 30cm;
+        }
+
+        h3{
+            font-style: italic;
+            margin-left: -18cm;
+            margin-top: -4.5cm;
+        }
+
     </style>
 </head>
 <body>
@@ -76,7 +84,7 @@
     <svg id='map' style='width: 750px; height: 750px'></svg>
 </div>
 <div>
-    <p id="howto">Drag the sliders to change the week day and hour of day.</p>
+    <p id="howto">Drag the sliders to change the weekday and time frame.</p>
     <div class="slidecontainer">
         <p id="week_slider_value" class="label">Monday</p>
         <input type="range" min="1" max="8" value="1" class="slider" id="weekRange">
@@ -86,6 +94,7 @@
         <p id="hour_slider_value" class="label">00-03</p>
         <input type="range" min="1" max="9" value="1" class="slider" id="hourRange">
     </div>
+    <h3 id="total"></h3>
 </div>
 <h2>Visualisation description:</h2>
 <p> The graph above shows the crimes registered in San Francisco in the period 2003-2015. All the crimes are represented on the map with dots.
@@ -96,6 +105,6 @@
 <p>Thus, we can conclude which day of the week the most crimes have happened (Saturday) and which hours of the day they have encountered(21.00-00.00, 00.00-03.00
     are the times of the day when the violent crimes happens most often).
     Another mention, which is visible in the chart, is that most of the crimes are happening in the north-east of San Francisco.
-    </p>
+</p>
 </body>
 </html>
