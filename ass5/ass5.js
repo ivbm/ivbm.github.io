@@ -150,11 +150,13 @@ function create_points(svg,projection, weekday, hour) {
                 }
             });
         circles.exit().remove();
+        var count = svg.selectAll('circle').size();
+        d3.select("#total").text('Crime Count: ' +count);
     });
 }
 
 function init() {
-    
+
     var weekday = global_weekday;
     var hour = global_hour;
 
@@ -174,8 +176,8 @@ function init() {
     projection = d3.geoMercator()
         .center([-122.410217, 37.780755 ])
         .scale(250000);
-        //.translate([width/1.95, height / 1.65]);
-        //.translate([w/2, h/2]);
+    //.translate([width/1.95, height / 1.65]);
+    //.translate([w/2, h/2]);
     //.scale([w * 0.16]);
 
     //path
