@@ -37,30 +37,91 @@ function create_points(svg,projection, weekday, hour) {
             .data(crimes.features
                 .filter(function (d) {
 
-                    if (weekday === "Whole week" && hour === "Whole day") {
-                        return d;
+
+                    // old code:
+                    /*if (weekday === "Whole week" && hour === "Whole day") {
+                        //return d;
+                        new_d = d;
                     }
                     else {
                         if (weekday === "Whole week") {
                             // only look at hours:
                             if (hour.includes(d.properties.Dates.slice(11,13))) {
-                                return d;
+                                //return d;
+                                new_d = d;
                             }
                         }
                         else if (hour === "Whole day") {
                             // only look at day:
                             if (d.properties.DayOfWeek === weekday) {
-                                return d;
+                                //return d;
+                                new_d = d;
                             }
                         }
                         else {
                             // look at both day and hours:
                             if (hour.includes(d.properties.Dates.slice(11,13)) && d.properties.DayOfWeek === weekday) {
-                                return d;
+                                //return d;
+                                new_d = d;
+                            }
+
+                        }
+                    }*/
+
+
+                    var new_d;
+
+                    if (weekday === "Whole week" && hour === "Whole day") {
+                        //return d;
+                        new_d = d;
+                    }
+                    else {
+                        if (weekday === "Whole week") {
+                            // only look at hours:
+                            if (hour.includes(d.properties.Dates.slice(11,13))) {
+                                //return d;
+                                new_d = d;
+                            }
+                        }
+                        else if (hour === "Whole day") {
+                            // only look at day:
+                            if (d.properties.DayOfWeek === weekday) {
+                                //return d;
+                                new_d = d;
+                            }
+                        }
+                        else {
+                            // look at both day and hours:
+                            if (hour.includes(d.properties.Dates.slice(11,13)) && d.properties.DayOfWeek === weekday) {
+                                //return d;
+                                new_d = d;
                             }
 
                         }
                     }
+
+                    new_d_check = d;
+
+                    if (typeof new_d == 'undefined') {
+                        // the variable is not defined - Nothing has matched yet, so look at old "d":
+                        // check on d.
+                        new_d_check = d;
+                    }
+                    else {
+                        // The variable IS defined. There is a 'd' in it.
+                        // Here further checks (say about year) can be done on the new_d:
+                        // check on new_d.
+                        new_d_check = new_d;
+
+                        // Just returning new_d_check so the code works. remove when doing new checks :D
+                        return new_d_check;
+                    }
+
+                    // Do checks on new_d_check here:
+
+                    // remember to return the old "d", if there is something in it, even if the new checks doesn't
+                    // find anything.
+
 
                 })
             );
