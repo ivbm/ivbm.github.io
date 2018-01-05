@@ -67,6 +67,7 @@
         }
 
         p {
+            padding-left: 0.5cm;
             max-width: 30cm;
         }
 
@@ -74,6 +75,7 @@
             font-style: italic;
             margin-left: -18cm;
             margin-top: -4.5cm;
+            text-shadow: -1px 0 gold, 0 1px gold, 1px 0 gold, 0 -1px gold;
         }
 
     </style>
@@ -84,7 +86,7 @@
     <svg id='map' style='width: 750px; height: 750px'></svg>
 </div>
 <div>
-    <p id="howto">Drag the sliders to change the weekday and time frame.</p>
+    <p id="howto">Drag the sliders to change the weekday and time frame. Zoom on map.</p>
     <div class="slidecontainer">
         <p id="week_slider_value" class="label">Monday</p>
         <input type="range" min="1" max="8" value="1" class="slider" id="weekRange">
@@ -98,13 +100,15 @@
 </div>
 <h2>Visualisation description:</h2>
 <p> The graph above shows the crimes registered in San Francisco in the period 2003-2015. All the crimes are represented on the map with dots.
-    The crimes have been divided in three classes depending on category. Violent categories of crimes like "ASSAULT, ROBBERY, SEX OFFENSES FORCIBLE, KIDNAPPING, ARSON,
-    EXTORTION, SUICIDE" are represented with red dots, "PROSTITUTION" with orange dots and all the other crimes with black dots.
-    Two sliders have been constructed in order to see the density of the crimes on the maps depending on the day of the week it happened and at each three hours.
+    The crimes have been divided in four classes depending on category. Violent categories of crimes like "ASSAULT, ROBBERY, SEX OFFENSES FORCIBLE, KIDNAPPING, ARSON,
+    EXTORTION, SUICIDE" are represented with red dots, theft related incidents such as 'BURGLARY', 'LARCENY/THEFT', 'STOLEN PROPERTY' and 'VEHICLE THEFT' are pink,
+    and "PROSTITUTION" is orange. All remaining crimes are black dots.
+    Two sliders have been constructed in order to see the density of the crimes on the maps depending on the day of the week it happened and for various time frames.
 </p>
-<p>Thus, we can conclude which day of the week the most crimes have happened (Saturday) and which hours of the day they have encountered(21.00-00.00, 00.00-03.00
-    are the times of the day when the violent crimes happens most often).
-    Another mention, which is visible in the chart, is that most of the crimes are happening in the north-east of San Francisco.
+<p>Thus, we can conclude which day of the week the most crimes have happened (Wednesday) and which hours of the day they mostly occur (15-18). The time frame with the
+    least criminal activity is 03-06, but a higher proportion of these are violent crimes. The days with the most crimes in this time frame are Saturday and Sunday,
+    indicating that the weekend might influence people's criminal behaviour.
+    Another mention, which is visible in the chart, is that most of the crimes are happening in the north-eastern part of San Francisco.
 </p>
 </body>
 </html>
